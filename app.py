@@ -4,9 +4,10 @@ import joblib
 import pandas as pd
 import logging
 
-
+# 配置日志
 logging.basicConfig(level=logging.INFO)
 
+# 加载模型和预处理器
 try:
     rf_classifier = joblib.load('random_forest_model.pkl')
     preprocessor = joblib.load('preprocessor.pkl')
@@ -20,12 +21,22 @@ CORS(app)
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        data = request.get_json()  
+        data = request.get_json()  # 使用 get_json 方法来解析 JSON 数据
         logging.info(f"Received data: {data}")
 
-     
-        if 'Hard/Smart worker' not in data:
-            return jsonify({'error': "'Hard/Smart worker' field is missing"}), 400
+        # 检查所有需要的字段
+        required_fields = [
+            'Logical quotient rating', 'coding skills rating', 'public speaking points',
+            'self-learning capability?', 'reading and writing skills', 'memory capability score',
+            'Smart Ability score', 'Technical Skill Score', 'Hard/Smart worker',
+            'Operations Research I', 'Operations Research II', 'Engineering Economics',
+            'Quality Management', 'Production Control', 'Statistics',
+            'Human Factors Engineering', 'Programming'
+        ]
+
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'error': f"'{field}' field is missing"}), 400
 
         new_data_df = pd.DataFrame([data])
         new_data_df = pd.get_dummies(new_data_df, columns=['Hard/Smart worker'], drop_first=True)
