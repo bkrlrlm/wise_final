@@ -16,7 +16,7 @@ preprocessor = joblib.load('preprocessor.pkl')
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/predict', methods=['GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
     new_data_df = pd.DataFrame([data])
