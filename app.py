@@ -30,7 +30,7 @@ def predict():
     new_data_scaled = preprocessor.transform(new_data_df)
     
     prediction = rf_classifier.predict(new_data_scaled)
-    return jsonify({'predicted_job_role': prediction[0]},message='CORS enabled')
+    return jsonify({'predicted_job_role': prediction[0]})
 
 if __name__ == '__main__':
     app.run(debug=True)
